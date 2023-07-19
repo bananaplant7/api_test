@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <input id="search" type="text" placeholder="random gif of..." value="dogs">
+        <button type="button">go!</button> 
+    </div>
+
+    <br>
+
+    <img src="#">
+    <script>
+        const img = document.querySelector('img');
+        const search = document.getElementById('search');
+        const btn = document.querySelector('button')
+
+        userSearchTerm = 'dogs'
+        noResultsSearchTerm = 'notfound'
+
+        btn.addEventListener("click", function() {
+            getSearch()
+            searchForGif()
+        })
+
+        function getSearch() {
+            userSearchTerm = search.value
+        }
+
+        function searchForGif() {
+            fetch(`https://api.giphy.com/v1/gifs/translate?api_key=U18NXfvR24dPP73yz2SwPhFl5m73hvir&s=${userSearchTerm}`, { mode: 'cors' })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (response) {
+                img.src = response.data.images.original.url;
+            })
+            .catch(function() {
+                fetch(`https://api.giphy.com/v1/gifs/translate?api_key=U18NXfvR24dPP73yz2SwPhFl5m73hvir&s=${noResultsSearchTerm}`, { mode: 'cors' })
+                    .then(function (response) {
+                    return response.json();
+                    })
+                    .then(function (response) {
+                        img.src = response.data.images.original.url;
+                    })
+            })
+        }
+
+        searchForGif()
+                
+    </script>
+</body>
+
+</html>
