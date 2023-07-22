@@ -33,25 +33,26 @@
             userSearchTerm = search.value
         }
 
-        function searchForGif() {
-            fetch(`https://api.giphy.com/v1/gifs/translate?api_key=U18NXfvR24dPP73yz2SwPhFl5m73hvir&s=${userSearchTerm}`, { mode: 'cors' })
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (response) {
-                img.src = response.data.images.original.url;
-            })
-            .catch(function() {
-                fetch(`https://api.giphy.com/v1/gifs/translate?api_key=U18NXfvR24dPP73yz2SwPhFl5m73hvir&s=${noResultsSearchTerm}`, { mode: 'cors' })
-                    .then(function (response) {
-                    return response.json();
-                    })
-                    .then(function (response) {
-                        img.src = response.data.images.original.url;
-                    })
-            })
+        async function searchForGif() {
+            let response
+            try {
+                response = await fetch(`https://api.giphy.com/v1/gifs/translate?api_key=U18NXfvR24dPP73yz2SwPhFl5m73hvir&s=${userSearchTerm}`, { mode: 'cors' })
+            }
+
+            catch (error) {
+                response = await fetch(`https://api.giphy.com/v1/gifs/translate?api_key=U18NXfvR24dPP73yz2SwPhFl5m73hvir&s=${noResultsSearchTerm}`, { mode: 'cors' })
+            }
+
+            finally {
+                let gifObj = await response.json()
+                img.src = gifObj.data.images.original.url
+            }
+            // fix by putting the duplicated code in a finally block
         }
 
+        
+
+        getSearch()
         searchForGif()
                 
     </script>
